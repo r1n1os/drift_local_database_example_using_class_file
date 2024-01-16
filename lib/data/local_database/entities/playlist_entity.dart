@@ -1,14 +1,17 @@
 import 'package:drift/drift.dart';
-import 'package:drift_local_database_example_using_classes/data/local_database/entities/song_entity.dart';
 import 'package:drift_local_database_example_using_classes/data/local_database/entities/playlist_with_song_entity.dart';
+import 'package:drift_local_database_example_using_classes/data/local_database/entities/song_entity.dart';
 
 import '../app_database.dart';
 
 @UseRowClass(PlaylistEntity)
 class PlaylistTable extends Table {
   IntColumn get id => integer()();
+
   TextColumn get name => text()();
+
   IntColumn get numberOfSongs => integer()();
+
   IntColumn get userId => integer()();
 
   ///Specifying which from the field above is the primary key
@@ -70,7 +73,17 @@ class PlaylistEntity {
 
   static Future<List<PlaylistEntity>> queryAllPlaylists() async {
     AppDatabase db = AppDatabase();
-    List<PlaylistEntity> playlistEntityList = await db.select(db.playlistTable).get();
+    List<PlaylistEntity> playlistEntityList =
+        await db.select(db.playlistTable).get();
+    await Future.forEach(playlistEntityList, (playlistEntity) async {
+      List<PlaylistWithSongEntity> playlistWithSongEntityList =
+          await _queryToGetPlaylistWithSongEntityList(
+                  playlistEntity.id ?? -1) ??
+              [];
+      List<SongEntity> songEntityList =
+          await _queryToGetSongEntityList(playlistWithSongEntityList);
+      playlistEntity.songEntityList = songEntityList;
+    });
     return playlistEntityList;
   }
 
@@ -79,6 +92,12 @@ class PlaylistEntity {
     PlaylistEntity? playlistEntity = await (db.select(db.playlistTable)
           ..where((tbl) => tbl.id.equals(playlistId)))
         .getSingleOrNull();
+    List<PlaylistWithSongEntity> playlistWithSongEntityList =
+        await _queryToGetPlaylistWithSongEntityList(playlistEntity?.id ?? -1) ??
+            [];
+    List<SongEntity> songEntityList =
+        await _queryToGetSongEntityList(playlistWithSongEntityList);
+    playlistEntity?.songEntityList = songEntityList;
     return playlistEntity;
   }
 
@@ -87,6 +106,34 @@ class PlaylistEntity {
     PlaylistEntity? playlistEntity = await (db.select(db.playlistTable)
           ..where((tbl) => tbl.userId.equals(userId)))
         .getSingleOrNull();
+    List<PlaylistWithSongEntity> playlistWithSongEntityList =
+        await _queryToGetPlaylistWithSongEntityList(playlistEntity?.id ?? -1) ??
+            [];
+    List<SongEntity> songEntityList =
+        await _queryToGetSongEntityList(playlistWithSongEntityList);
+    playlistEntity?.songEntityList = songEntityList;
     return playlistEntity;
+  }
+
+  static Future<List<PlaylistWithSongEntity>?>
+      _queryToGetPlaylistWithSongEntityList(int playlistId) async {
+    return await PlaylistWithSongEntity.queryListOfPlaylistWithSongByPlaylistId(
+        playlistId);
+  }
+
+  static Future<List<SongEntity>> _queryToGetSongEntityList(
+      List<PlaylistWithSongEntity>? playlistWithSongEntityList) async {
+    List<SongEntity> queriedSongEntityList = [];
+    if (playlistWithSongEntityList != null) {
+      await Future.forEach(playlistWithSongEntityList,
+          (playlistWithSongEntity) async {
+        SongEntity? tempSongEntity =
+            await SongEntity.querySongById(playlistWithSongEntity.songId ?? -1);
+        if (tempSongEntity != null) {
+          queriedSongEntityList.add(tempSongEntity);
+        }
+      });
+    }
+    return queriedSongEntityList;
   }
 }
