@@ -3,7 +3,7 @@ import 'package:drift_local_database_example_using_classes/data/local_database/a
 import 'package:drift_local_database_example_using_classes/data/local_database/entities/song_entity.dart';
 
 @UseRowClass(ArtistEntity)
-class ArtistTable extends Table {
+class Artist extends Table {
   IntColumn get id => integer()();
   TextColumn get name => text()();
   IntColumn get age => integer()();
@@ -24,8 +24,8 @@ class ArtistEntity {
   ArtistEntity(
       {this.id, this.name, this.age, this.musicStyle, this.songEntityList});
 
-  ArtistTableCompanion toCompanion() {
-    return ArtistTableCompanion(
+  ArtistCompanion toCompanion() {
+    return ArtistCompanion(
         id: Value(id ?? -1),
         name: Value(name ?? ''),
         musicStyle: Value(musicStyle ?? ''),
@@ -34,7 +34,7 @@ class ArtistEntity {
 
   static Future<void> saveSingleArtistEntity(ArtistEntity artistEntity) async {
     AppDatabase db = AppDatabase();
-    await db.into(db.artistTable).insertOnConflictUpdate(artistEntity.toCompanion());
+    await db.into(db.artist).insertOnConflictUpdate(artistEntity.toCompanion());
     if (artistEntity.songEntityList != null) {
       await SongEntity.saveListOfSongsEntity(artistEntity.songEntityList ?? []);
     }
@@ -49,13 +49,13 @@ class ArtistEntity {
 
   static Future<List<ArtistEntity>> queryAllArtists() async {
     AppDatabase db = AppDatabase();
-    List<ArtistEntity> artistEntityList = await db.select(db.artistTable).get();
+    List<ArtistEntity> artistEntityList = await db.select(db.artist).get();
     return artistEntityList;
   }
 
   static Future<ArtistEntity?> queryArtistById(int artistId) async {
     AppDatabase db = AppDatabase();
-    ArtistEntity? artistEntity = await (db.select(db.artistTable)
+    ArtistEntity? artistEntity = await (db.select(db.artist)
           ..where((tbl) => tbl.id.equals(artistId)))
         .getSingleOrNull();
     return artistEntity;

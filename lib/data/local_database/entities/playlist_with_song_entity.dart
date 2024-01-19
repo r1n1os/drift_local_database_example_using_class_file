@@ -2,9 +2,11 @@ import 'package:drift/drift.dart';
 import 'package:drift_local_database_example_using_classes/data/local_database/app_database.dart';
 
 @UseRowClass(PlaylistWithSongEntity)
-class PlaylistWithSongTable extends Table {
+class PlaylistWithSong extends Table {
   IntColumn get id => integer()();
+
   IntColumn get songId => integer()();
+
   IntColumn get playlistId => integer()();
 
   ///Specifying which from the field above is the primary key
@@ -18,23 +20,35 @@ class PlaylistWithSongEntity {
 
   PlaylistWithSongEntity({this.songId, this.playlistId});
 
-  PlaylistWithSongTableCompanion toCompanion() {
-    return PlaylistWithSongTableCompanion(
+  PlaylistWithSongCompanion toCompanion() {
+    return PlaylistWithSongCompanion(
       songId: Value(songId ?? -1),
       playlistId: Value(playlistId ?? -1),
     );
   }
 
-  static Future<void> saveSinglePlaylistWithSongEntity(PlaylistWithSongEntity playlistWithSongEntity) async {
+  static Future<void> saveSinglePlaylistWithSongEntity(
+      PlaylistWithSongEntity playlistWithSongEntity) async {
     AppDatabase db = AppDatabase();
-    await db.into(db.playlistWithSongTable).insertOnConflictUpdate(playlistWithSongEntity.toCompanion());
+    await db
+        .into(db.playlistWithSong)
+        .insertOnConflictUpdate(playlistWithSongEntity.toCompanion());
   }
 
- static Future<List<PlaylistWithSongEntity>?> queryListOfPlaylistWithSongByPlaylistId(int playlistId) async {
+  static Future<void> cleanRelationshipBasedOnPlaylistId(int playlistId) async {
     AppDatabase db = AppDatabase();
-    List<PlaylistWithSongEntity> playlistWithSongEntityList = await (db.select(db.playlistWithSongTable)
+    await (db.delete(db.playlistWithSong)
       ..where((tbl) => tbl.playlistId.equals(playlistId)))
-        .get();
+        .go();
+  }
+
+  static Future<List<PlaylistWithSongEntity>?>
+      queryListOfPlaylistWithSongByPlaylistId(int playlistId) async {
+    AppDatabase db = AppDatabase();
+    List<PlaylistWithSongEntity> playlistWithSongEntityList =
+        await (db.select(db.playlistWithSong)
+              ..where((tbl) => tbl.playlistId.equals(playlistId)))
+            .get();
     return playlistWithSongEntityList;
   }
 }

@@ -15,11 +15,11 @@ part 'app_database.g.dart';
 
 @DriftDatabase(
   tables: [
-    ArtistTable,
-    PlaylistTable,
-    PlaylistWithSongTable,
-    SongTable,
-    UserTable
+    Artist,
+    Playlist,
+    PlaylistWithSong,
+    Song,
+    User
   ],
 )
 class AppDatabase extends _$AppDatabase {

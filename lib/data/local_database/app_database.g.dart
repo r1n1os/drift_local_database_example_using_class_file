@@ -3,12 +3,11 @@
 part of 'app_database.dart';
 
 // ignore_for_file: type=lint
-class $ArtistTableTable extends ArtistTable
-    with TableInfo<$ArtistTableTable, ArtistEntity> {
+class $ArtistTable extends Artist with TableInfo<$ArtistTable, ArtistEntity> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ArtistTableTable(this.attachedDatabase, [this._alias]);
+  $ArtistTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -36,7 +35,7 @@ class $ArtistTableTable extends ArtistTable
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'artist_table';
+  static const String $name = 'artist';
   @override
   VerificationContext validateIntegrity(Insertable<ArtistEntity> instance,
       {bool isInserting = false}) {
@@ -86,23 +85,23 @@ class $ArtistTableTable extends ArtistTable
   }
 
   @override
-  $ArtistTableTable createAlias(String alias) {
-    return $ArtistTableTable(attachedDatabase, alias);
+  $ArtistTable createAlias(String alias) {
+    return $ArtistTable(attachedDatabase, alias);
   }
 }
 
-class ArtistTableCompanion extends UpdateCompanion<ArtistEntity> {
+class ArtistCompanion extends UpdateCompanion<ArtistEntity> {
   final Value<int> id;
   final Value<String> name;
   final Value<int> age;
   final Value<String> musicStyle;
-  const ArtistTableCompanion({
+  const ArtistCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.age = const Value.absent(),
     this.musicStyle = const Value.absent(),
   });
-  ArtistTableCompanion.insert({
+  ArtistCompanion.insert({
     this.id = const Value.absent(),
     required String name,
     required int age,
@@ -124,12 +123,12 @@ class ArtistTableCompanion extends UpdateCompanion<ArtistEntity> {
     });
   }
 
-  ArtistTableCompanion copyWith(
+  ArtistCompanion copyWith(
       {Value<int>? id,
       Value<String>? name,
       Value<int>? age,
       Value<String>? musicStyle}) {
-    return ArtistTableCompanion(
+    return ArtistCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       age: age ?? this.age,
@@ -157,7 +156,7 @@ class ArtistTableCompanion extends UpdateCompanion<ArtistEntity> {
 
   @override
   String toString() {
-    return (StringBuffer('ArtistTableCompanion(')
+    return (StringBuffer('ArtistCompanion(')
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('age: $age, ')
@@ -167,12 +166,12 @@ class ArtistTableCompanion extends UpdateCompanion<ArtistEntity> {
   }
 }
 
-class $PlaylistTableTable extends PlaylistTable
-    with TableInfo<$PlaylistTableTable, PlaylistEntity> {
+class $PlaylistTable extends Playlist
+    with TableInfo<$PlaylistTable, PlaylistEntity> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $PlaylistTableTable(this.attachedDatabase, [this._alias]);
+  $PlaylistTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -200,7 +199,7 @@ class $PlaylistTableTable extends PlaylistTable
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'playlist_table';
+  static const String $name = 'playlist';
   @override
   VerificationContext validateIntegrity(Insertable<PlaylistEntity> instance,
       {bool isInserting = false}) {
@@ -250,23 +249,23 @@ class $PlaylistTableTable extends PlaylistTable
   }
 
   @override
-  $PlaylistTableTable createAlias(String alias) {
-    return $PlaylistTableTable(attachedDatabase, alias);
+  $PlaylistTable createAlias(String alias) {
+    return $PlaylistTable(attachedDatabase, alias);
   }
 }
 
-class PlaylistTableCompanion extends UpdateCompanion<PlaylistEntity> {
+class PlaylistCompanion extends UpdateCompanion<PlaylistEntity> {
   final Value<int> id;
   final Value<String> name;
   final Value<int> numberOfSongs;
   final Value<int> userId;
-  const PlaylistTableCompanion({
+  const PlaylistCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.numberOfSongs = const Value.absent(),
     this.userId = const Value.absent(),
   });
-  PlaylistTableCompanion.insert({
+  PlaylistCompanion.insert({
     this.id = const Value.absent(),
     required String name,
     required int numberOfSongs,
@@ -288,12 +287,12 @@ class PlaylistTableCompanion extends UpdateCompanion<PlaylistEntity> {
     });
   }
 
-  PlaylistTableCompanion copyWith(
+  PlaylistCompanion copyWith(
       {Value<int>? id,
       Value<String>? name,
       Value<int>? numberOfSongs,
       Value<int>? userId}) {
-    return PlaylistTableCompanion(
+    return PlaylistCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       numberOfSongs: numberOfSongs ?? this.numberOfSongs,
@@ -321,7 +320,7 @@ class PlaylistTableCompanion extends UpdateCompanion<PlaylistEntity> {
 
   @override
   String toString() {
-    return (StringBuffer('PlaylistTableCompanion(')
+    return (StringBuffer('PlaylistCompanion(')
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('numberOfSongs: $numberOfSongs, ')
@@ -331,12 +330,12 @@ class PlaylistTableCompanion extends UpdateCompanion<PlaylistEntity> {
   }
 }
 
-class $PlaylistWithSongTableTable extends PlaylistWithSongTable
-    with TableInfo<$PlaylistWithSongTableTable, PlaylistWithSongEntity> {
+class $PlaylistWithSongTable extends PlaylistWithSong
+    with TableInfo<$PlaylistWithSongTable, PlaylistWithSongEntity> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $PlaylistWithSongTableTable(this.attachedDatabase, [this._alias]);
+  $PlaylistWithSongTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -359,7 +358,7 @@ class $PlaylistWithSongTableTable extends PlaylistWithSongTable
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'playlist_with_song_table';
+  static const String $name = 'playlist_with_song';
   @override
   VerificationContext validateIntegrity(
       Insertable<PlaylistWithSongEntity> instance,
@@ -400,22 +399,22 @@ class $PlaylistWithSongTableTable extends PlaylistWithSongTable
   }
 
   @override
-  $PlaylistWithSongTableTable createAlias(String alias) {
-    return $PlaylistWithSongTableTable(attachedDatabase, alias);
+  $PlaylistWithSongTable createAlias(String alias) {
+    return $PlaylistWithSongTable(attachedDatabase, alias);
   }
 }
 
-class PlaylistWithSongTableCompanion
+class PlaylistWithSongCompanion
     extends UpdateCompanion<PlaylistWithSongEntity> {
   final Value<int> id;
   final Value<int> songId;
   final Value<int> playlistId;
-  const PlaylistWithSongTableCompanion({
+  const PlaylistWithSongCompanion({
     this.id = const Value.absent(),
     this.songId = const Value.absent(),
     this.playlistId = const Value.absent(),
   });
-  PlaylistWithSongTableCompanion.insert({
+  PlaylistWithSongCompanion.insert({
     this.id = const Value.absent(),
     required int songId,
     required int playlistId,
@@ -433,9 +432,9 @@ class PlaylistWithSongTableCompanion
     });
   }
 
-  PlaylistWithSongTableCompanion copyWith(
+  PlaylistWithSongCompanion copyWith(
       {Value<int>? id, Value<int>? songId, Value<int>? playlistId}) {
-    return PlaylistWithSongTableCompanion(
+    return PlaylistWithSongCompanion(
       id: id ?? this.id,
       songId: songId ?? this.songId,
       playlistId: playlistId ?? this.playlistId,
@@ -459,7 +458,7 @@ class PlaylistWithSongTableCompanion
 
   @override
   String toString() {
-    return (StringBuffer('PlaylistWithSongTableCompanion(')
+    return (StringBuffer('PlaylistWithSongCompanion(')
           ..write('id: $id, ')
           ..write('songId: $songId, ')
           ..write('playlistId: $playlistId')
@@ -468,12 +467,11 @@ class PlaylistWithSongTableCompanion
   }
 }
 
-class $SongTableTable extends SongTable
-    with TableInfo<$SongTableTable, SongEntity> {
+class $SongTable extends Song with TableInfo<$SongTable, SongEntity> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $SongTableTable(this.attachedDatabase, [this._alias]);
+  $SongTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -502,7 +500,7 @@ class $SongTableTable extends SongTable
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'song_table';
+  static const String $name = 'song';
   @override
   VerificationContext validateIntegrity(Insertable<SongEntity> instance,
       {bool isInserting = false}) {
@@ -550,23 +548,23 @@ class $SongTableTable extends SongTable
   }
 
   @override
-  $SongTableTable createAlias(String alias) {
-    return $SongTableTable(attachedDatabase, alias);
+  $SongTable createAlias(String alias) {
+    return $SongTable(attachedDatabase, alias);
   }
 }
 
-class SongTableCompanion extends UpdateCompanion<SongEntity> {
+class SongCompanion extends UpdateCompanion<SongEntity> {
   final Value<int> id;
   final Value<String> name;
   final Value<int> duration;
   final Value<int> artistId;
-  const SongTableCompanion({
+  const SongCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.duration = const Value.absent(),
     this.artistId = const Value.absent(),
   });
-  SongTableCompanion.insert({
+  SongCompanion.insert({
     this.id = const Value.absent(),
     required String name,
     required int duration,
@@ -588,12 +586,12 @@ class SongTableCompanion extends UpdateCompanion<SongEntity> {
     });
   }
 
-  SongTableCompanion copyWith(
+  SongCompanion copyWith(
       {Value<int>? id,
       Value<String>? name,
       Value<int>? duration,
       Value<int>? artistId}) {
-    return SongTableCompanion(
+    return SongCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       duration: duration ?? this.duration,
@@ -621,7 +619,7 @@ class SongTableCompanion extends UpdateCompanion<SongEntity> {
 
   @override
   String toString() {
-    return (StringBuffer('SongTableCompanion(')
+    return (StringBuffer('SongCompanion(')
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('duration: $duration, ')
@@ -631,12 +629,11 @@ class SongTableCompanion extends UpdateCompanion<SongEntity> {
   }
 }
 
-class $UserTableTable extends UserTable
-    with TableInfo<$UserTableTable, UserEntity> {
+class $UserTable extends User with TableInfo<$UserTable, UserEntity> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $UserTableTable(this.attachedDatabase, [this._alias]);
+  $UserTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -667,7 +664,7 @@ class $UserTableTable extends UserTable
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'user_table';
+  static const String $name = 'user';
   @override
   VerificationContext validateIntegrity(Insertable<UserEntity> instance,
       {bool isInserting = false}) {
@@ -719,23 +716,23 @@ class $UserTableTable extends UserTable
   }
 
   @override
-  $UserTableTable createAlias(String alias) {
-    return $UserTableTable(attachedDatabase, alias);
+  $UserTable createAlias(String alias) {
+    return $UserTable(attachedDatabase, alias);
   }
 }
 
-class UserTableCompanion extends UpdateCompanion<UserEntity> {
+class UserCompanion extends UpdateCompanion<UserEntity> {
   final Value<int> id;
   final Value<String> username;
   final Value<String> musicStyle;
   final Value<String> favoriteSongName;
-  const UserTableCompanion({
+  const UserCompanion({
     this.id = const Value.absent(),
     this.username = const Value.absent(),
     this.musicStyle = const Value.absent(),
     this.favoriteSongName = const Value.absent(),
   });
-  UserTableCompanion.insert({
+  UserCompanion.insert({
     this.id = const Value.absent(),
     required String username,
     required String musicStyle,
@@ -757,12 +754,12 @@ class UserTableCompanion extends UpdateCompanion<UserEntity> {
     });
   }
 
-  UserTableCompanion copyWith(
+  UserCompanion copyWith(
       {Value<int>? id,
       Value<String>? username,
       Value<String>? musicStyle,
       Value<String>? favoriteSongName}) {
-    return UserTableCompanion(
+    return UserCompanion(
       id: id ?? this.id,
       username: username ?? this.username,
       musicStyle: musicStyle ?? this.musicStyle,
@@ -790,7 +787,7 @@ class UserTableCompanion extends UpdateCompanion<UserEntity> {
 
   @override
   String toString() {
-    return (StringBuffer('UserTableCompanion(')
+    return (StringBuffer('UserCompanion(')
           ..write('id: $id, ')
           ..write('username: $username, ')
           ..write('musicStyle: $musicStyle, ')
@@ -802,16 +799,16 @@ class UserTableCompanion extends UpdateCompanion<UserEntity> {
 
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
-  late final $ArtistTableTable artistTable = $ArtistTableTable(this);
-  late final $PlaylistTableTable playlistTable = $PlaylistTableTable(this);
-  late final $PlaylistWithSongTableTable playlistWithSongTable =
-      $PlaylistWithSongTableTable(this);
-  late final $SongTableTable songTable = $SongTableTable(this);
-  late final $UserTableTable userTable = $UserTableTable(this);
+  late final $ArtistTable artist = $ArtistTable(this);
+  late final $PlaylistTable playlist = $PlaylistTable(this);
+  late final $PlaylistWithSongTable playlistWithSong =
+      $PlaylistWithSongTable(this);
+  late final $SongTable song = $SongTable(this);
+  late final $UserTable user = $UserTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [artistTable, playlistTable, playlistWithSongTable, songTable, userTable];
+      [artist, playlist, playlistWithSong, song, user];
 }

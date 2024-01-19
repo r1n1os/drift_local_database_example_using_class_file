@@ -3,7 +3,7 @@ import 'package:drift_local_database_example_using_classes/data/local_database/a
 import 'package:drift_local_database_example_using_classes/data/local_database/entities/playlist_entity.dart';
 
 @UseRowClass(UserEntity)
-class UserTable extends Table {
+class User extends Table {
   IntColumn get id => integer()();
   TextColumn get username => text()();
   TextColumn get musicStyle => text()();
@@ -28,8 +28,8 @@ class UserEntity {
       this.favoriteSongName,
       this.playlistEntity});
 
-  UserTableCompanion toCompanion() {
-    return UserTableCompanion(
+  UserCompanion toCompanion() {
+    return UserCompanion(
       id: Value(id ?? -1),
       username: Value(username ?? ''),
       musicStyle: Value(musicStyle ?? ''),
@@ -39,7 +39,7 @@ class UserEntity {
 
   static Future<void> saveSingleUserEntity(UserEntity userEntity) async {
     AppDatabase db = AppDatabase();
-    await db.into(db.userTable).insertOnConflictUpdate(userEntity.toCompanion());
+    await db.into(db.user).insertOnConflictUpdate(userEntity.toCompanion());
     if (userEntity.playlistEntity != null) {
       await PlaylistEntity.saveSinglePlaylistEntity(userEntity.playlistEntity!);
     }
@@ -54,14 +54,14 @@ class UserEntity {
 
  static Future<List<UserEntity>> queryAllUsers() async {
     AppDatabase db = AppDatabase();
-    List<UserEntity> userEntityList = await db.select(db.userTable).get();
+    List<UserEntity> userEntityList = await db.select(db.user).get();
     return userEntityList;
   }
 
   static Future<UserEntity?> queryUserById(int userId) async {
     AppDatabase db = AppDatabase();
     UserEntity? userEntity =
-        await (db.select(db.userTable)..where((tbl) => tbl.id.equals(userId))).getSingleOrNull();
+        await (db.select(db.user)..where((tbl) => tbl.id.equals(userId))).getSingleOrNull();
     return userEntity;
   }
 }
