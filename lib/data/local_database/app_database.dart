@@ -7,6 +7,7 @@ import 'package:drift_local_database_example_using_classes/data/local_database/e
 import 'package:drift_local_database_example_using_classes/data/local_database/entities/playlist_with_song_entity.dart';
 import 'package:drift_local_database_example_using_classes/data/local_database/entities/song_entity.dart';
 import 'package:drift_local_database_example_using_classes/data/local_database/entities/user_entity.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:drift_dev/api/migrations.dart';
@@ -26,7 +27,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration {
@@ -40,13 +41,17 @@ class AppDatabase extends _$AppDatabase {
       ///In this method is where we are handling our migration
       onUpgrade: (Migrator m, int from, int to) async {
          if (from < 2) {
-          //await m.addColumn(artistTable, artistTable.dueDate);
+          await m.addColumn(artist, artist.isActive);
+          ///The code line below is when you need to migrate newly added table
+          //await m.create(newTable);
         }
       },
 
       ///This method is helpful as it help us during development phase to check if we did migration correctly
       beforeOpen: (details) async {
-        await validateDatabaseSchema();
+        if (kDebugMode) {
+          await validateDatabaseSchema();
+        }
       },
     );
   }
