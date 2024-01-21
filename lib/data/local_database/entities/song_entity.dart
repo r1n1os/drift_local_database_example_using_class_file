@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:drift_local_database_example_using_classes/data/local_database/app_database.dart';
+import 'package:drift_local_database_example_using_classes/data/local_database/entities/artist_entity.dart';
 
 @UseRowClass(SongEntity)
 class Song extends Table {
@@ -21,8 +22,23 @@ class SongEntity {
   String? name;
   int? duration;
   int? artistId;
+  ArtistEntity? artistEntity;
 
-  SongEntity({this.id, this.name, this.duration, this.artistId});
+  SongEntity({this.id, this.name, this.duration, this.artistId, this.artistEntity});
+
+  SongEntity.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    duration = json['duration'];
+    if(json['artist'] != null){
+      artistEntity = ArtistEntity.fromJson(json['artist']);
+      artistId = artistEntity?.id;
+    }
+  }
+
+  static List<SongEntity> fromJsonArray(List jsonArray) {
+    return jsonArray.map((value) => SongEntity.fromJson(value)).toList();
+  }
 
   SongCompanion toCompanion() {
     return SongCompanion(

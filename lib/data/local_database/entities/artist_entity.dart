@@ -25,6 +25,20 @@ class ArtistEntity {
   ArtistEntity(
       {this.id, this.name, this.age, this.musicStyle, this.songEntityList});
 
+  ArtistEntity.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    age = json['age'];
+    musicStyle = json['music_style'];
+    if(json['songs'] != null) {
+      songEntityList = SongEntity.fromJsonArray(json['songs']);
+    }
+  }
+
+  static Future<List<ArtistEntity>> fromJsonArray(List jsonArray) async {
+    return jsonArray.map((value) => ArtistEntity.fromJson(value)).toList();
+  }
+
   ArtistCompanion toCompanion() {
     return ArtistCompanion(
         id: Value(id ?? -1),

@@ -33,6 +33,20 @@ class PlaylistEntity {
       this.userId,
       this.songEntityList});
 
+  PlaylistEntity.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    numberOfSongs = json['number_of_songs'];
+    userId = json['user_id'];
+    if(json['songs'] != null){
+      songEntityList = SongEntity.fromJsonArray(json['songs']);
+    }
+  }
+
+  static Future<List<PlaylistEntity>> fromJsonArray(List jsonArray) async {
+    return jsonArray.map((value) => PlaylistEntity.fromJson(value)).toList();
+  }
+
   PlaylistCompanion toCompanion() {
     return PlaylistCompanion(
       id: Value(id ?? -1),

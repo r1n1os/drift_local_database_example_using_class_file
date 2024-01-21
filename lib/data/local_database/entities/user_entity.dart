@@ -28,6 +28,20 @@ class UserEntity {
       this.favoriteSongName,
       this.playlistEntity});
 
+  UserEntity.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    username = json['username'];
+    musicStyle = json['music_style'];
+    favoriteSongName = json['favorite_song_name'];
+    if(json['playlist'] != null){
+      playlistEntity = PlaylistEntity.fromJson(json['playlist']);
+    }
+  }
+
+  static Future<List<UserEntity>> fromJsonArray(List jsonArray) async {
+    return jsonArray.map((value) => UserEntity.fromJson(value)).toList();
+  }
+
   UserCompanion toCompanion() {
     return UserCompanion(
       id: Value(id ?? -1),
