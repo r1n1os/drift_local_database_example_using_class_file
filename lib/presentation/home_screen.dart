@@ -19,11 +19,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _parseData() async {
     List<UserEntity> userEntity = await UserEntity.fromJsonArray(DataSource.dataSource['Users']);
-    print(userEntity);
+    _saveDataIntoLocalDatabase(userEntity);
+    //print(userEntity);
   }
 
   @override
   Widget build(BuildContext context) {
     return const Placeholder();
+  }
+
+  void _saveDataIntoLocalDatabase(List<UserEntity> userEntity) async {
+    await UserEntity.saveListOfUserEntity(userEntity);
+    List<UserEntity> queriedList =  await UserEntity.queryAllUsers();
+    print("test $queriedList");
   }
 }
