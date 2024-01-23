@@ -57,19 +57,6 @@ class DataSource {
                 "name": "Miley Cyrus",
                 "age": 65,
                 "music_style": "Pop",
-                "songs": [
-                  {
-                    "id": 8,
-                    "name": "Flowers",
-                    "duration": 100,
-                    "artist": {
-                      "id": 11,
-                      "name": "Miley Cyrus",
-                      "age": 65,
-                      "music_style": "Pop",
-                    },
-                  }
-                ],
               }
             },
             {

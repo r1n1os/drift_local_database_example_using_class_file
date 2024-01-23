@@ -69,6 +69,9 @@ class UserEntity {
  static Future<List<UserEntity>> queryAllUsers() async {
     AppDatabase db = AppDatabase();
     List<UserEntity> userEntityList = await db.select(db.user).get();
+    await Future.forEach(userEntityList, (userEntity) async {
+      userEntity.playlistEntity = await queryPlaylistEntityByUserId(userEntity.id ?? -1);
+    });
     return userEntityList;
   }
 
@@ -76,6 +79,12 @@ class UserEntity {
     AppDatabase db = AppDatabase();
     UserEntity? userEntity =
         await (db.select(db.user)..where((tbl) => tbl.id.equals(userId))).getSingleOrNull();
+    if(userEntity != null) {
+      userEntity.playlistEntity =
+      await queryPlaylistEntityByUserId(userEntity.id ?? -1);
+    }
     return userEntity;
   }
+
+  static Future<PlaylistEntity?> queryPlaylistEntityByUserId(int userId) async => await PlaylistEntity.queryPlaylistByUserId(userId);
 }

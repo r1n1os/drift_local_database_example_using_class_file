@@ -65,6 +65,9 @@ class ArtistEntity {
   static Future<List<ArtistEntity>> queryAllArtists() async {
     AppDatabase db = AppDatabase();
     List<ArtistEntity> artistEntityList = await db.select(db.artist).get();
+    await Future.forEach(artistEntityList, (artistEntity) async {
+      artistEntity.songEntityList = await queryListOfSongEntityByArtistId(artistEntity.id ?? -1);
+    });
     return artistEntityList;
   }
 
@@ -73,6 +76,12 @@ class ArtistEntity {
     ArtistEntity? artistEntity = await (db.select(db.artist)
           ..where((tbl) => tbl.id.equals(artistId)))
         .getSingleOrNull();
+    if(artistEntity != null) {
+      artistEntity.songEntityList = await queryListOfSongEntityByArtistId(artistEntity.id ?? -1);
+    }
     return artistEntity;
   }
+
+  static Future<List<SongEntity>> queryListOfSongEntityByArtistId(int artistId) async => await SongEntity.queryListOfSongsByArtistId(artistId);
+
 }
