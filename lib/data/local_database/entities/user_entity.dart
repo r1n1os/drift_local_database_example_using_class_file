@@ -5,8 +5,11 @@ import 'package:drift_local_database_example_using_classes/data/local_database/e
 @UseRowClass(UserEntity)
 class User extends Table {
   IntColumn get id => integer()();
+
   TextColumn get username => text()();
+
   TextColumn get musicStyle => text()();
+
   TextColumn get favoriteSongName => text()();
 
   ///Specifying which from the field above is the primary key
@@ -33,7 +36,7 @@ class UserEntity {
     username = json['username'];
     musicStyle = json['music_style'];
     favoriteSongName = json['favorite_song_name'];
-    if(json['playlist'] != null){
+    if (json['playlist'] != null) {
       playlistEntity = PlaylistEntity.fromJson(json['playlist']);
     }
   }
@@ -52,7 +55,7 @@ class UserEntity {
   }
 
   static Future<void> saveSingleUserEntity(UserEntity userEntity) async {
-    AppDatabase db = AppDatabase();
+    AppDatabase db = AppDatabase.instance();
     await db.into(db.user).insertOnConflictUpdate(userEntity.toCompanion());
     if (userEntity.playlistEntity != null) {
       await PlaylistEntity.saveSinglePlaylistEntity(userEntity.playlistEntity!);
@@ -61,30 +64,34 @@ class UserEntity {
 
   static Future<void> saveListOfUserEntity(
       List<UserEntity> userEntityList) async {
-    await Future.forEach(userEntityList, (userEntity) {
-      saveSingleUserEntity(userEntity);
+    await Future.forEach(userEntityList, (userEntity) async {
+      await saveSingleUserEntity(userEntity);
     });
   }
 
- static Future<List<UserEntity>> queryAllUsers() async {
-    AppDatabase db = AppDatabase();
+  static Future<List<UserEntity>> queryAllUsers() async {
+    AppDatabase db = AppDatabase.instance();
     List<UserEntity> userEntityList = await db.select(db.user).get();
     await Future.forEach(userEntityList, (userEntity) async {
-      userEntity.playlistEntity = await queryPlaylistEntityByUserId(userEntity.id ?? -1);
+      userEntity.playlistEntity =
+          await queryPlaylistEntityByUserId(userEntity.id ?? -1);
     });
     return userEntityList;
   }
 
   static Future<UserEntity?> queryUserById(int userId) async {
-    AppDatabase db = AppDatabase();
-    UserEntity? userEntity =
-        await (db.select(db.user)..where((tbl) => tbl.id.equals(userId))).getSingleOrNull();
-    if(userEntity != null) {
+    AppDatabase db = AppDatabase.instance();
+    UserEntity? userEntity = await (db.select(db.user)
+          ..where((tbl) => tbl.id.equals(userId)))
+        .getSingleOrNull();
+    if (userEntity != null) {
       userEntity.playlistEntity =
-      await queryPlaylistEntityByUserId(userEntity.id ?? -1);
+          await queryPlaylistEntityByUserId(userEntity.id ?? -1);
     }
     return userEntity;
   }
 
-  static Future<PlaylistEntity?> queryPlaylistEntityByUserId(int userId) async => await PlaylistEntity.queryPlaylistByUserId(userId);
+  static Future<PlaylistEntity?> queryPlaylistEntityByUserId(
+          int userId) async =>
+      await PlaylistEntity.queryPlaylistByUserId(userId);
 }

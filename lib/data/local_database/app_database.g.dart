@@ -29,17 +29,8 @@ class $ArtistTable extends Artist with TableInfo<$ArtistTable, ArtistEntity> {
   late final GeneratedColumn<String> musicStyle = GeneratedColumn<String>(
       'music_style', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _isActiveMeta =
-      const VerificationMeta('isActive');
   @override
-  late final GeneratedColumn<bool> isActive = GeneratedColumn<bool>(
-      'is_active', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("is_active" IN (0, 1))'));
-  @override
-  List<GeneratedColumn> get $columns => [id, name, age, musicStyle, isActive];
+  List<GeneratedColumn> get $columns => [id, name, age, musicStyle];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -73,12 +64,6 @@ class $ArtistTable extends Artist with TableInfo<$ArtistTable, ArtistEntity> {
     } else if (isInserting) {
       context.missing(_musicStyleMeta);
     }
-    if (data.containsKey('is_active')) {
-      context.handle(_isActiveMeta,
-          isActive.isAcceptableOrUnknown(data['is_active']!, _isActiveMeta));
-    } else if (isInserting) {
-      context.missing(_isActiveMeta);
-    }
     return context;
   }
 
@@ -110,37 +95,31 @@ class ArtistCompanion extends UpdateCompanion<ArtistEntity> {
   final Value<String> name;
   final Value<int> age;
   final Value<String> musicStyle;
-  final Value<bool> isActive;
   const ArtistCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.age = const Value.absent(),
     this.musicStyle = const Value.absent(),
-    this.isActive = const Value.absent(),
   });
   ArtistCompanion.insert({
     this.id = const Value.absent(),
     required String name,
     required int age,
     required String musicStyle,
-    required bool isActive,
   })  : name = Value(name),
         age = Value(age),
-        musicStyle = Value(musicStyle),
-        isActive = Value(isActive);
+        musicStyle = Value(musicStyle);
   static Insertable<ArtistEntity> custom({
     Expression<int>? id,
     Expression<String>? name,
     Expression<int>? age,
     Expression<String>? musicStyle,
-    Expression<bool>? isActive,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (age != null) 'age': age,
       if (musicStyle != null) 'music_style': musicStyle,
-      if (isActive != null) 'is_active': isActive,
     });
   }
 
@@ -148,14 +127,12 @@ class ArtistCompanion extends UpdateCompanion<ArtistEntity> {
       {Value<int>? id,
       Value<String>? name,
       Value<int>? age,
-      Value<String>? musicStyle,
-      Value<bool>? isActive}) {
+      Value<String>? musicStyle}) {
     return ArtistCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       age: age ?? this.age,
       musicStyle: musicStyle ?? this.musicStyle,
-      isActive: isActive ?? this.isActive,
     );
   }
 
@@ -174,9 +151,6 @@ class ArtistCompanion extends UpdateCompanion<ArtistEntity> {
     if (musicStyle.present) {
       map['music_style'] = Variable<String>(musicStyle.value);
     }
-    if (isActive.present) {
-      map['is_active'] = Variable<bool>(isActive.value);
-    }
     return map;
   }
 
@@ -186,8 +160,7 @@ class ArtistCompanion extends UpdateCompanion<ArtistEntity> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('age: $age, ')
-          ..write('musicStyle: $musicStyle, ')
-          ..write('isActive: $isActive')
+          ..write('musicStyle: $musicStyle')
           ..write(')'))
         .toString();
   }

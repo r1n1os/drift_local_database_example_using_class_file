@@ -1,5 +1,7 @@
+import 'package:drift_local_database_example_using_classes/data/local_database/entities/artist_entity.dart';
 import 'package:drift_local_database_example_using_classes/data/local_database/entities/user_entity.dart';
 import 'package:drift_local_database_example_using_classes/utils/data_source.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _parseData() async {
     List<UserEntity> userEntity = await UserEntity.fromJsonArray(DataSource.dataSource['Users']);
     _saveDataIntoLocalDatabase(userEntity);
-    //print(userEntity);
+    _retrieveDataFromLocalDatabase();
   }
 
   @override
@@ -30,7 +32,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _saveDataIntoLocalDatabase(List<UserEntity> userEntity) async {
     await UserEntity.saveListOfUserEntity(userEntity);
-    List<UserEntity> queriedList =  await UserEntity.queryAllUsers();
-    print("test $queriedList");
+
+  }
+
+  void _retrieveDataFromLocalDatabase() async {
+    List<UserEntity> userEntityList =  await UserEntity.queryAllUsers();
+    List<ArtistEntity> artistEntityList = await ArtistEntity.queryAllArtists();
+    if (kDebugMode) {
+      print("Queried users: $userEntityList");
+      print("Queried artist: $artistEntityList");
+    }
   }
 }

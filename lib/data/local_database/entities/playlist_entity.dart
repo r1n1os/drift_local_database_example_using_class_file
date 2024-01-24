@@ -58,7 +58,7 @@ class PlaylistEntity {
 
   static Future<void> saveSinglePlaylistEntity(
       PlaylistEntity playlistEntity) async {
-    AppDatabase db = AppDatabase();
+    AppDatabase db = AppDatabase.instance();
     await db
         .into(db.playlist)
         .insertOnConflictUpdate(playlistEntity.toCompanion());
@@ -72,7 +72,7 @@ class PlaylistEntity {
   static Future<void> _saveSongAndRelationshipData(
       List<SongEntity> songEntityList, int playlistId) async {
     await Future.forEach(songEntityList, (songEntity) async {
-      SongEntity.saveSingleSongEntity(songEntity);
+      await SongEntity.saveSingleSongEntity(songEntity);
       await PlaylistWithSongEntity.saveSinglePlaylistWithSongEntity(
           PlaylistWithSongEntity(
               songId: songEntity.id, playlistId: playlistId));
@@ -81,13 +81,13 @@ class PlaylistEntity {
 
   static Future<void> saveListOfPlaylist(
       List<PlaylistEntity> playlistEntityList) async {
-    await Future.forEach(playlistEntityList, (playlistEntity) {
-      saveSinglePlaylistEntity(playlistEntity);
+    await Future.forEach(playlistEntityList, (playlistEntity) async {
+      await saveSinglePlaylistEntity(playlistEntity);
     });
   }
 
   static Future<List<PlaylistEntity>> queryAllPlaylists() async {
-    AppDatabase db = AppDatabase();
+    AppDatabase db = AppDatabase.instance();
     List<PlaylistEntity> playlistEntityList =
         await db.select(db.playlist).get();
     await Future.forEach(playlistEntityList, (playlistEntity) async {
@@ -103,7 +103,7 @@ class PlaylistEntity {
   }
 
   static Future<PlaylistEntity?> queryPlaylistById(int playlistId) async {
-    AppDatabase db = AppDatabase();
+    AppDatabase db = AppDatabase.instance();
     PlaylistEntity? playlistEntity = await (db.select(db.playlist)
           ..where((tbl) => tbl.id.equals(playlistId)))
         .getSingleOrNull();
@@ -117,7 +117,7 @@ class PlaylistEntity {
   }
 
   static Future<PlaylistEntity?> queryPlaylistByUserId(int userId) async {
-    AppDatabase db = AppDatabase();
+    AppDatabase db = AppDatabase.instance();
     PlaylistEntity? playlistEntity = await (db.select(db.playlist)
           ..where((tbl) => tbl.userId.equals(userId)))
         .getSingleOrNull();

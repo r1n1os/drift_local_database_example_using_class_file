@@ -22,17 +22,17 @@ class SongEntity {
   String? name;
   int? duration;
   int? artistId;
-  ArtistEntity? artistEntity;
+  //ArtistEntity? artistEntity;
 
-  SongEntity({this.id, this.name, this.duration, this.artistId, this.artistEntity});
+  SongEntity({this.id, this.name, this.duration, this.artistId, /*this.artistEntity*/});
 
   SongEntity.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     duration = json['duration'];
     if(json['artist'] != null){
-      artistEntity = ArtistEntity.fromJson(json['artist']);
-      artistId = artistEntity?.id;
+      //artistEntity = ArtistEntity.fromJson(json['artist']);
+      artistId = json['artist']['id'];//artistEntity?.id;
     }
   }
 
@@ -49,39 +49,58 @@ class SongEntity {
   }
 
   static Future<void> saveSingleSongEntity(SongEntity songEntity) async {
-    AppDatabase db = AppDatabase();
+    AppDatabase db = AppDatabase.instance();
     await db
         .into(db.song)
         .insertOnConflictUpdate(songEntity.toCompanion());
+  /*  if(songEntity.artistEntity != null) {
+      await ArtistEntity.saveSingleArtistEntity(songEntity.artistEntity!);
+    }*/
   }
 
   static Future<void> saveListOfSongsEntity(
       List<SongEntity> songEntityList) async {
-    await Future.forEach(songEntityList, (songEntity) {
-      saveSingleSongEntity(songEntity);
+    await Future.forEach(songEntityList, (songEntity) async {
+      await saveSingleSongEntity(songEntity);
     });
   }
 
   static Future<List<SongEntity>> queryAllSongs() async {
-    AppDatabase db = AppDatabase();
+    AppDatabase db = AppDatabase.instance();
     List<SongEntity> songEntityList = await db.select(db.song).get();
+   /* await Future.forEach(songEntityList, (songEntity) async {
+      ArtistEntity? tempArtistEntity = await ArtistEntity.queryArtistById(songEntity.artistId ?? -1);
+      if(tempArtistEntity != null) {
+        songEntity.artistEntity = tempArtistEntity;
+      }
+    });*/
     return songEntityList;
   }
 
   static Future<SongEntity?> querySongById(int songId) async {
-    AppDatabase db = AppDatabase();
+    AppDatabase db = AppDatabase.instance();
     SongEntity? songEntity = await (db.select(db.song)
           ..where((tbl) => tbl.id.equals(songId)))
         .getSingleOrNull();
+   /* ArtistEntity? tempArtistEntity = await ArtistEntity.queryArtistById(songEntity?.artistId ?? -1);
+    if(tempArtistEntity != null) {
+      songEntity?.artistEntity = tempArtistEntity;
+    }*/
     return songEntity;
   }
 
   static Future<List<SongEntity>> queryListOfSongsByArtistId(
       int artistId) async {
-    AppDatabase db = AppDatabase();
+    AppDatabase db = AppDatabase.instance();
     List<SongEntity> songEntityList = await (db.select(db.song)
           ..where((tbl) => tbl.artistId.equals(artistId)))
         .get();
+   /* await Future.forEach(songEntityList, (songEntity) async {
+      ArtistEntity? tempArtistEntity = await ArtistEntity.queryArtistById(songEntity.artistId ?? -1);
+      if(tempArtistEntity != null) {
+        songEntity.artistEntity = tempArtistEntity;
+      }
+    });*/
     return songEntityList;
   }
 }
