@@ -1,6 +1,5 @@
 import 'package:drift/drift.dart';
 import 'package:drift_local_database_example_using_classes/data/local_database/app_database.dart';
-import 'package:drift_local_database_example_using_classes/data/local_database/entities/artist_entity.dart';
 
 @UseRowClass(SongEntity)
 class Song extends Table {
@@ -22,7 +21,6 @@ class SongEntity {
   String? name;
   int? duration;
   int? artistId;
-  //ArtistEntity? artistEntity;
 
   SongEntity({this.id, this.name, this.duration, this.artistId, /*this.artistEntity*/});
 
@@ -31,8 +29,7 @@ class SongEntity {
     name = json['name'];
     duration = json['duration'];
     if(json['artist'] != null){
-      //artistEntity = ArtistEntity.fromJson(json['artist']);
-      artistId = json['artist']['id'];//artistEntity?.id;
+      artistId = json['artist']['id'];
     }
   }
 
@@ -53,9 +50,6 @@ class SongEntity {
     await db
         .into(db.song)
         .insertOnConflictUpdate(songEntity.toCompanion());
-  /*  if(songEntity.artistEntity != null) {
-      await ArtistEntity.saveSingleArtistEntity(songEntity.artistEntity!);
-    }*/
   }
 
   static Future<void> saveListOfSongsEntity(
@@ -68,12 +62,6 @@ class SongEntity {
   static Future<List<SongEntity>> queryAllSongs() async {
     AppDatabase db = AppDatabase.instance();
     List<SongEntity> songEntityList = await db.select(db.song).get();
-   /* await Future.forEach(songEntityList, (songEntity) async {
-      ArtistEntity? tempArtistEntity = await ArtistEntity.queryArtistById(songEntity.artistId ?? -1);
-      if(tempArtistEntity != null) {
-        songEntity.artistEntity = tempArtistEntity;
-      }
-    });*/
     return songEntityList;
   }
 
@@ -82,10 +70,6 @@ class SongEntity {
     SongEntity? songEntity = await (db.select(db.song)
           ..where((tbl) => tbl.id.equals(songId)))
         .getSingleOrNull();
-   /* ArtistEntity? tempArtistEntity = await ArtistEntity.queryArtistById(songEntity?.artistId ?? -1);
-    if(tempArtistEntity != null) {
-      songEntity?.artistEntity = tempArtistEntity;
-    }*/
     return songEntity;
   }
 
@@ -95,12 +79,6 @@ class SongEntity {
     List<SongEntity> songEntityList = await (db.select(db.song)
           ..where((tbl) => tbl.artistId.equals(artistId)))
         .get();
-   /* await Future.forEach(songEntityList, (songEntity) async {
-      ArtistEntity? tempArtistEntity = await ArtistEntity.queryArtistById(songEntity.artistId ?? -1);
-      if(tempArtistEntity != null) {
-        songEntity.artistEntity = tempArtistEntity;
-      }
-    });*/
     return songEntityList;
   }
 }

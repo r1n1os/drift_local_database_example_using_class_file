@@ -12,7 +12,7 @@ class Artist extends Table {
 
   TextColumn get musicStyle => text()();
 
-  // BoolColumn get isActive => boolean()(); //This field is added only for migration example
+  //BoolColumn get isActive => boolean()(); //This field is added only for migration example
 
   ///Specifying which from the field above is the primary key
   @override

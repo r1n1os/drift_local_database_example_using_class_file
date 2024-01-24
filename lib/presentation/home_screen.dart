@@ -20,9 +20,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _parseData() async {
-    List<UserEntity> userEntity = await UserEntity.fromJsonArray(DataSource.dataSource['Users']);
-    _saveDataIntoLocalDatabase(userEntity);
-    _retrieveDataFromLocalDatabase();
+    List<UserEntity> userEntityList = await UserEntity.fromJsonArray(DataSource.usersDataSource['Users']);
+    List<ArtistEntity> artistEntityList = await ArtistEntity.fromJsonArray(DataSource.artistDataSource['Artists']);
+    await _saveDataIntoLocalDatabase(userEntityList, artistEntityList);
+    await _retrieveDataFromLocalDatabase();
   }
 
   @override
@@ -30,12 +31,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return const Placeholder();
   }
 
-  void _saveDataIntoLocalDatabase(List<UserEntity> userEntity) async {
-    await UserEntity.saveListOfUserEntity(userEntity);
-
+  Future<void> _saveDataIntoLocalDatabase(List<UserEntity> userEntityList,  List<ArtistEntity> artistEntityList) async {
+    await UserEntity.saveListOfUserEntity(userEntityList);
+    await ArtistEntity.saveListOfArtistEntity(artistEntityList);
   }
 
-  void _retrieveDataFromLocalDatabase() async {
+  Future<void> _retrieveDataFromLocalDatabase() async {
     List<UserEntity> userEntityList =  await UserEntity.queryAllUsers();
     List<ArtistEntity> artistEntityList = await ArtistEntity.queryAllArtists();
     if (kDebugMode) {

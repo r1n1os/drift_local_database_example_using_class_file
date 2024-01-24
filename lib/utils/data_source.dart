@@ -1,5 +1,5 @@
 class DataSource {
-  static dynamic dataSource = {
+  static dynamic usersDataSource = {
     "Users": [
       {
         "id": 12345,
@@ -72,6 +72,60 @@ class DataSource {
             }
           ]
         }
+      },
+    ]
+  };
+
+  static dynamic artistDataSource = {
+    "Artists": [
+      {
+        "id": 5,
+        "name": "Stevie Nicks",
+        "age": 65,
+        "music_style": "Rock",
+        "songs": [
+          {
+            "id": 5,
+            "name": "Dreams",
+            "duration": 100,
+            "artist": {
+              "id": 5,
+              "name": "Stevie Nicks",
+              "age": 65,
+              "music_style": "Rock",
+            }
+          },
+          {
+            "id": 6,
+            "name": "Rocket Man",
+            "duration": 110,
+            "artist": {
+              "id": 5,
+              "name": "Elton John Nicks",
+              "age": 55,
+              "music_style": "Rock",
+            }
+          }
+        ],
+      },
+      {
+        "id": 11,
+        "name": "Miley Cyrus",
+        "age": 65,
+        "music_style": "Pop",
+        "songs": [
+          {
+            "id": 8,
+            "name": "Flowers",
+            "duration": 100,
+            "artist": {
+              "id": 11,
+              "name": "Miley Cyrus",
+              "age": 65,
+              "music_style": "Pop",
+            }
+          },
+        ],
       },
     ]
   };

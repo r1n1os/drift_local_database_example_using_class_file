@@ -24,7 +24,6 @@ part 'app_database.g.dart';
   ],
 )
 class AppDatabase extends _$AppDatabase {
-
   static final AppDatabase _instance = AppDatabase();
 
   static AppDatabase instance() => _instance;
