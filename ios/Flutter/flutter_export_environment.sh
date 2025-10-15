@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=C:\flutter"
-export "FLUTTER_APPLICATION_PATH=C:\Users\r1n1os\AndroidStudioProjects\drift_local_database_example_using_classes"
+export "FLUTTER_ROOT=C:\Users\Evagoras\flutter"
+export "FLUTTER_APPLICATION_PATH=C:\Users\Evagoras\AndroidStudioProjects\drift_local_database_example_using_class_file"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_TARGET=lib\main.dart"
 export "FLUTTER_BUILD_DIR=build"
